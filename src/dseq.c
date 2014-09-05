@@ -23,6 +23,9 @@ seq '2015-07-11' -4 '2014-07-11' -> print every fourth day between 2015-07-11 an
 
 */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include <getopt.h>   
 #include <stdio.h>
 #include <stdbool.h>  /* bool */
