@@ -59,6 +59,7 @@ usage(int status) {
     //  TODO: gettext that and all dat text shit
     fprintf(stderr, "Try '%s --help' for more information.\n", PROGRAM_NAME);
   } else {
+    // TODO: write the actual usage
     printf("Use me like so motherfucker\n");    
   }
 
@@ -197,8 +198,6 @@ int main(int argc, char **argv) {
    * int print that many days from the start date (forward or backward). 
    */
   if(n_args == 2) {
-    // FIXME: -1 as second arg doesn't work
-
     char *end = strptime(argv[optind], format_str, &start_tm);
     if(end == NULL || *end != '\0') {
       error(0, 0, "bad start date format: %s\n", argv[optind]);
