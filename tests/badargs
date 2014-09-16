@@ -1,0 +1,26 @@
+#!/bin/sh
+
+./src/dseq 2> tests/err-out.$$
+
+if diff -c tests/err-out.$$ - <<EOF
+./src/dseq: missing operand
+Try 'dseq --help' for more information.
+EOF
+then
+    rm -f tests/err-out.$$
+else
+    rm -f tests/err-out.$$
+    exit 1
+fi
+
+./src/dseq 1 2 3 4 2> tests/err-out.$$
+if diff -c tests/err-out.$$ - <<EOF
+./src/dseq: extra operand 4
+Try 'dseq --help' for more information.
+EOF
+then
+    rm -f tests/err-out.$$
+else
+    rm -f tests/err-out.$$
+    exit 1
+fi

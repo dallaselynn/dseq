@@ -37,3 +37,4 @@ GSYMS
 GTAGS
 TAGS
 src/dseq
+tests/*.trs

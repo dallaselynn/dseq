@@ -1,0 +1,86 @@
+#!/bin/sh
+
+./src/dseq 2014-07-01 2014-07-11 > tests/twoarg-out.$$
+
+if diff -c tests/twoarg-out.$$ - <<EOF
+2014-07-01
+2014-07-02
+2014-07-03
+2014-07-04
+2014-07-05
+2014-07-06
+2014-07-07
+2014-07-08
+2014-07-09
+2014-07-10
+2014-07-11
+EOF
+then
+    rm -f tests/twoarg-out.$$
+else
+    rm -f tests/twoarg-out.$$
+    echo "./src/dseq 2014-07-01 2014-07-11 failed"
+    exit 1
+fi
+
+
+./src/dseq 2014-07-11 2014-07-01 > tests/twoarg-out.$$
+
+if diff -c tests/twoarg-out.$$ - <<EOF
+2014-07-11
+2014-07-10
+2014-07-09
+2014-07-08
+2014-07-07
+2014-07-06
+2014-07-05
+2014-07-04
+2014-07-03
+2014-07-02
+2014-07-01
+EOF
+then
+    rm -f tests/twoarg-out.$$
+else
+    rm -f tests/twoarg-out.$$
+    echo "./src/dseq 2014-07-11 2014-07-01 failed"
+    exit 1
+fi
+
+
+if [ `./src/dseq 2014-07-11 2014-07-11` != "2014-07-11" ];
+then
+    echo "./src/dseq 2014-07-11 2014-07-11 failed"
+    exit 1;
+fi
+
+
+if [ `./src/dseq 2014-07-11 1` != "2014-07-11" ];
+then
+    echo "./src/dseq 2014-07-11 1 failed"
+    exit 1;
+fi
+
+
+if [ `./src/dseq 2014-07-11 0 | wc -l` != "0" ];
+then
+    echo "./src/dseq 2014-07-11 0 failed"
+    exit 1;
+fi
+
+
+if [ `./src/dseq 2014-07-11 -0 | wc -l` != "0" ];
+then
+    echo "./src/dseq 2014-07-11 0 failed"
+    exit 1;
+fi
+
+
+if [ $(./src/dseq 2014-07-11 '-1') != "2014-07-11" ];
+then
+    echo "./src/dseq 2014-07-11 -1 failed"
+    exit 1;
+fi
+
+
+exit 0

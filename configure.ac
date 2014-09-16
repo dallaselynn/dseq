@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([dseq], [0.2], [dallas@dallaslynn.com])
-AM_INIT_AUTOMAKE([dist-bzip2 -Wall])
+AM_INIT_AUTOMAKE([dist-bzip2 -Wall parallel-tests color-tests])
 AC_CONFIG_SRCDIR([src/dseq.c])
 AC_CONFIG_HEADERS([config.h])
 

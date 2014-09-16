@@ -1,0 +1,30 @@
+#!/bin/sh
+
+TEN=`./src/dseq 10 | wc -l`
+if [ $TEN != "10" ];
+then
+    echo "dseq 10 did not give 10 dates"
+    exit 1
+fi
+
+MTEN=`./src/dseq -10 | wc -l`
+if [ $MTEN != "10" ];
+then
+    echo "dseq -10 did not give 10 dates"
+    exit 1
+fi
+
+./src/dseq aaa 2> tests/onearg-out.$$
+if diff -c tests/onearg-out.$$ - <<EOF
+./src/dseq: invalid integer argument: aaa
+Try 'dseq --help' for more information.
+EOF
+then
+    rm -f tests/onearg-out.$$
+else
+    rm -f tests/onearg-out.$$
+    exit 1
+fi
+
+
+exit 0

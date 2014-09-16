@@ -217,17 +217,20 @@ int main(int argc, char **argv) {
         error(0, 0, "bad end date format: %s\n", argv[optind]);
         usage(EXIT_FAILURE);
       }
-
-      if(mktime(&start_tm) > mktime(&end_tm))
-        step = -1;
-
     /* second arg is an offset */
     } else {
       end_tm = start_tm;
+
+      if(offset == 0)
+        exit(EXIT_SUCCESS);
+
       end_tm.tm_mday += (offset > 0) ? offset -1 : offset;
       time_t then = mktime(&end_tm);
       gmtime_r(&then, &end_tm);
     }
+
+    if(mktime(&start_tm) > mktime(&end_tm))
+      step = -1;
   }
 
   /* if there are three args then it's start_date interval end_date */
