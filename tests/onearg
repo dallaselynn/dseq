@@ -17,6 +17,7 @@ fi
 ./src/dseq aaa 2> tests/onearg-out.$$
 if diff -c tests/onearg-out.$$ - <<EOF
 ./src/dseq: invalid integer argument: aaa
+
 Try 'dseq --help' for more information.
 EOF
 then

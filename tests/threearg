@@ -77,21 +77,23 @@ fi
 
 ./src/dseq 2014-05-01 2014-04-02 2014-05-02 2> tests/threearg-out.$$
 if diff -c tests/threearg-out.$$ - <<EOF
-./src/dseq: invalid step argument: 2014-04-02
+./src/dseq: invalid integer argument: 2014-04-02
+
 Try 'dseq --help' for more information.
 EOF
 then
     rm -f tests/threearg-out.$$
 else
     rm -f tests/threearg-out.$$
-    echo "failed to detect 2014-05-02 as invalid step argument"
+    echo "failed to detect 2014-04-02 as invalid step argument"
     exit 1
 fi
 
 ./src/dseq 2014-05-01 aaa 2014-05-02 2> tests/threearg-out.$$
 
 if diff -c tests/threearg-out.$$ - <<EOF
-./src/dseq: invalid step argument: 2014-04-02
+./src/dseq: invalid integer argument: aaa
+
 Try 'dseq --help' for more information.
 EOF
 then
@@ -107,6 +109,7 @@ fi
 
 if diff -c tests/threearg-out.$$ - <<EOF
 ./src/dseq: bad date format: aaa
+
 Try 'dseq --help' for more information.
 EOF
 then
@@ -122,6 +125,7 @@ fi
 
 if diff -c tests/threearg-out.$$ - <<EOF
 ./src/dseq: bad date format: asdfjkl
+
 Try 'dseq --help' for more information.
 EOF
 then
