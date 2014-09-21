@@ -34,7 +34,8 @@ seq '2015-07-11' -4 '2014-07-11' -> print every fourth day between 2015-07-11 an
 #include <limits.h>
 #include <unistd.h>   /* stdout */
 
-#include "xstrtol.h"
+#include "xstrtol.h"  /* xstrtol */
+#include "progname.h" /* set_program_name */
 
 #define PROGRAM_NAME "dseq"
 #define AUTHORS proper_name ("Dallas Lynn")
@@ -55,7 +56,7 @@ static struct option const long_options[] =
 };
 
 
-void __attribute__ ((noreturn))
+void
 usage(int status) { 
   if (status != EXIT_SUCCESS) {
     //  TODO: gettext that and all dat text shit
@@ -151,8 +152,8 @@ int main(int argc, char **argv) {
   separator = "\n";
   step = 1;
 
+  set_program_name(argv[0]);
   /* TODO 
-     - set_program_name
      - setlocale
      - bindtextdomain / textdomain ?
      - atexit (close_stdout) ?
