@@ -69,13 +69,13 @@ usage(int status) {
 }
 
 
-static size_t __attribute__ ((pure)) 
+static size_t _GL_ATTRIBUTE_PURE
 format_size (char const *fmt, struct tm *t) {
   return strftime(NULL, SIZE_MAX, fmt, t) + 1;
 }
 
 
-static char const * __attribute__ ((const))
+static char const * _GL_ATTRIBUTE_CONST
 get_default_format() {
   return "%Y-%m-%d";
 }
