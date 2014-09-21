@@ -79,6 +79,18 @@ get_default_format() {
 }
 
 
+char *
+xstrptime(const char *s, const char *format, struct tm *tm) {
+  char *end = strptime(s, format, tm);
+  if(end == NULL || *end != '\0') {
+    error(0, 0, "bad date format: %s\n", s);
+    usage(EXIT_FAILURE);
+  }
+
+  return end;
+}
+
+
 // TODO: step could be a struct with days, minutes, seconds, etc. fields. that 
 // could be added individually.
 static void
@@ -93,6 +105,12 @@ print_dates(struct tm start, struct tm end, long step, char const *fmt) {
   char buf[buf_size];
   time_t first = mktime(&start);
   time_t last = mktime(&end);
+
+  /* conceptually counting down with a positive step or counting up with a negative step
+   * makes no sense, attempt to do what one means by inverting the signs in those cases.
+   */
+  if(((first > last) && (step > 0)) || (first < last) && (step < 0))
+    step = -step;
 
   bool out_of_range = (step > 0 ? first > last : first < last);
 
@@ -235,9 +253,10 @@ int main(int argc, char **argv) {
 
   /* if there are three args then it's start_date interval end_date */
   if(n_args == 3) {
-    // TODO: check return of strptime.
-    strptime(argv[optind], format_str, &start_tm);
-    strptime(argv[optind+2], format_str, &end_tm);
+
+    xstrptime(argv[optind], format_str, &start_tm); 
+    xstrptime(argv[optind+2], format_str, &end_tm);
+    // TODO: change to (x)strtol
     step = atol(argv[optind+1]);
   }
 
