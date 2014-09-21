@@ -34,6 +34,8 @@ seq '2015-07-11' -4 '2014-07-11' -> print every fourth day between 2015-07-11 an
 #include <limits.h>
 #include <unistd.h>   /* stdout */
 
+#include "xstrtol.h"
+
 #define PROGRAM_NAME "dseq"
 #define AUTHORS proper_name ("Dallas Lynn")
 #define ONE_DAY 24 * 60 * 60
@@ -67,15 +69,27 @@ usage(int status) {
 }
 
 
-static size_t __attribute__ ((pure)) 
+static size_t _GL_ATTRIBUTE_PURE
 format_size (char const *fmt, struct tm *t) {
   return strftime(NULL, SIZE_MAX, fmt, t) + 1;
 }
 
 
-static char const * __attribute__ ((const))
+static char const * _GL_ATTRIBUTE_CONST
 get_default_format() {
   return "%Y-%m-%d";
+}
+
+
+char *
+xstrptime(const char *s, const char *format, struct tm *tm) {
+  char *end = strptime(s, format, tm);
+  if(end == NULL || *end != '\0') {
+    error(0, 0, "bad date format: %s\n", s);
+    usage(EXIT_FAILURE);
+  }
+
+  return end;
 }
 
 
@@ -93,6 +107,12 @@ print_dates(struct tm start, struct tm end, long step, char const *fmt) {
   char buf[buf_size];
   time_t first = mktime(&start);
   time_t last = mktime(&end);
+
+  /* conceptually counting down with a positive step or counting up with a negative step
+   * makes no sense, attempt to do what one means by inverting the signs in those cases.
+   */
+  if(((first > last) && (step > 0)) || (first < last) && (step < 0))
+    step = -step;
 
   bool out_of_range = (step > 0 ? first > last : first < last);
 
@@ -120,7 +140,8 @@ print_dates(struct tm start, struct tm end, long step, char const *fmt) {
 
 
 int main(int argc, char **argv) {
-  int optc;                 
+  int optc;
+  long offset;
   struct tm start_tm, end_tm;
   memset(&start_tm, 0, sizeof(struct tm));
   memset(&end_tm, 0, sizeof(struct tm));
@@ -181,9 +202,11 @@ int main(int argc, char **argv) {
 
   /* if there is one arg it must be an integer and the implicit start is today */
   if(n_args == 1) {
-    // TODO: check return of strtol or precheck to make sure a real int arg instead of eg. 10aaa
-    // or xstrtol from gnulib
-    long offset = strtol(argv[optind], NULL, 10);
+    if(xstrtol(argv[optind], NULL, 10, &offset, "") != LONGINT_OK) {
+      error(0, 0, "invalid integer argument: %s\n", argv[optind]);
+      usage(EXIT_FAILURE);
+    }
+
     time_t now = time(NULL);
     step = offset > 0 ? 1 : -1;
 
@@ -204,14 +227,8 @@ int main(int argc, char **argv) {
       usage(EXIT_FAILURE);
     }
 
-    errno = 0;    /* To distinguish success/failure after call */
-    char *endptr;
-    long offset = strtol(argv[optind+1], &endptr, 10);
-
+    if(xstrtol(argv[optind+1], NULL, 10, &offset, "") != LONGINT_OK) {
     /* not a valid integer, check for valid date */
-    if ((errno == ERANGE && (offset == LONG_MAX || offset == LONG_MIN))
-        || (errno != 0 && offset == 0) || *endptr != '\0') {
-
       end = strptime(argv[optind+1], format_str, &end_tm);
       if(end == NULL || *end != '\0') {
         error(0, 0, "bad end date format: %s\n", argv[optind]);
@@ -235,10 +252,13 @@ int main(int argc, char **argv) {
 
   /* if there are three args then it's start_date interval end_date */
   if(n_args == 3) {
-    // TODO: check return of strptime.
-    strptime(argv[optind], format_str, &start_tm);
-    strptime(argv[optind+2], format_str, &end_tm);
-    step = atol(argv[optind+1]);
+
+    xstrptime(argv[optind], format_str, &start_tm); 
+    xstrptime(argv[optind+2], format_str, &end_tm);
+    if(xstrtol(argv[optind+1], NULL, 10, &step, "") != LONGINT_OK) {
+      error(0, 0, "invalid integer argument: %s\n", argv[optind+1]);
+      usage(EXIT_FAILURE);
+    }
   }
 
   print_dates(start_tm, end_tm, step, output_format);

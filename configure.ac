@@ -9,6 +9,8 @@ AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
+gl_EARLY
+gl_INIT
 AC_PROG_INSTALL
 
 # Checks for libraries.
@@ -26,5 +28,6 @@ AC_FUNC_MKTIME
 AC_CHECK_FUNCS([localtime_r memset strtol])
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 lib/Makefile])
 AC_OUTPUT
