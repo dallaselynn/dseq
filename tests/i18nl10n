@@ -1,0 +1,59 @@
+#!/bin/sh
+
+LC_TIME=C ./src/dseq -o "%x" 2015-01-01 2015-01-05 > tests/i18nl10n-out.$$
+if diff -c tests/i18nl10n-out.$$ - <<EOF
+01/01/15
+01/02/15
+01/03/15
+01/04/15
+01/05/15
+EOF
+then
+    rm -f tests/i18nl10n-out.$$
+else
+    rm -f tests/i18nl10n-out.$$
+    echo "Failed locale C output test"
+    exit 1
+fi
+
+
+LC_TIME=en_US.utf8 ./src/dseq -o "%x" 2015-01-01 2015-01-05 > tests/i18nl10n-out.$$
+if diff -c tests/i18nl10n-out.$$ - <<EOF
+01/01/2015
+01/02/2015
+01/03/2015
+01/04/2015
+01/05/2015
+EOF
+then
+    rm -f tests/i18nl10n-out.$$
+else
+    rm -f tests/i18nl10n-out.$$
+    echo "Failed locale en_US.utf8 output test"
+    exit 1
+fi
+
+
+if locale -a | grep ^ru_RU.utf8 >/dev/null ; then
+    LC_TIME=ru_RU.utf8 ./src/dseq -o "%x" 2015-01-01 2015-01-05 > tests/i18nl10n-out.$$
+    if diff -c tests/i18nl10n-out.$$ - <<EOF
+01.01.2015
+02.01.2015
+03.01.2015
+04.01.2015
+05.01.2015
+EOF
+    then
+        rm -f tests/i18nl10n-out.$$
+    else
+        rm -f tests/i18nl10n-out.$$
+        echo "Failed locale ru_RU.utf8 output test"
+        exit 1
+    fi
+
+else
+    echo "skipping ru_RU.utf8 test, not installed"
+fi
+
+
+exit 0
