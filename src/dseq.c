@@ -102,7 +102,7 @@ print_dates(struct tm start, struct tm end, long step, char const *fmt) {
   /* conceptually counting down with a positive step or counting up with a negative step
    * makes no sense, attempt to do what one means by inverting the signs in those cases.
    */
-  if(((first > last) && (step > 0)) || (first < last) && (step < 0))
+  if(((first > last) && (step > 0)) || ((first < last) && (step < 0)))
     step = -step;
 
   bool out_of_range = (step > 0 ? first > last : first < last);
