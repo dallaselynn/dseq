@@ -1,12 +1,21 @@
 #define _XOPEN_SOURCE
 
-/* dseq - print sequence of dates to standard output 
+/* dseq -- print a sequence of dates to standard out.  Like seq, but for dates.
 
-TODO: hour/minute/second/ms/us instead of just dates in a sequence?
-TODO: can do better than strptime, gnulib has a timespec struct that comes with useful functions
-timspec_add, timespec_sub, this is also what parse_datetime wants to put its results into.
-or maybe should use tai64 to represent the date...
-*/
+   Copyright 2014 Dallas Lynn
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
