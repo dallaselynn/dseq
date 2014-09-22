@@ -33,6 +33,7 @@ seq '2015-07-11' -4 '2014-07-11' -> print every fourth day between 2015-07-11 an
 #include <errno.h>    /* errno */
 #include <limits.h>
 #include <unistd.h>   /* stdout */
+#include <locale.h>   /* setlocale */
 
 #include "xstrtol.h"  /* xstrtol */
 #include "progname.h" /* set_program_name */
@@ -153,8 +154,9 @@ int main(int argc, char **argv) {
   step = 1;
 
   set_program_name(argv[0]);
+  setlocale(LC_ALL, "");
+
   /* TODO 
-     - setlocale
      - bindtextdomain / textdomain ?
      - atexit (close_stdout) ?
   */
