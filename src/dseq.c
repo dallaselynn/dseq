@@ -36,6 +36,7 @@
 #include "xstrtol.h"  /* xstrtol */
 #include "progname.h" /* set_program_name */
 #include "quote.h"    /* quote */
+#include "closeout.h" /* close_stdout */
 
 #define PROGRAM_NAME "dseq"
 #define AUTHORS proper_name ("Dallas Lynn")
@@ -154,11 +155,7 @@ int main(int argc, char **argv) {
 
   set_program_name(argv[0]);
   setlocale(LC_ALL, "");
-
-  /* TODO 
-     - bindtextdomain / textdomain ?
-     - atexit (close_stdout) ?
-  */
+  atexit(close_stdout);
 
   while(optind < argc) {
     if(argv[optind][0] == '-' && isdigit(argv[optind][1]))
