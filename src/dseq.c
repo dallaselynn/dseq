@@ -2,21 +2,10 @@
 
 /* dseq - print sequence of dates to standard output 
 
-seq will go backwards only if increment is given.
-
-*** dseq - like seq unix built in but for dates
-**** get_date / gnulib
-**** dseq "something parsable by getdate" number_of_days
-**** dseq "getdate() string" "get_date() string"
-**** tai64?
-**** hour/minute/second/ms/us instead of just dates
-
-seq 10 -> print 10 days into the future, starting from today   X
-seq -10 -> print 10 days into the past, starting from today  X
-seq '2014-07-11' 10 -> print 10 days starting with 2014-07-11  X
-seq '2014-07-11' '2014-07-17' -> print all days from 7-11-2014 to 7-17-2014, inclusive  X
-seq '2014-07-11' 4 '2015-07-11' -> print every fourth day between 2014-07-11 and 2015-07-11, inclusive, starting at 2014 X
-seq '2015-07-11' -4 '2014-07-11' -> print every fourth day between 2015-07-11 and 2014-07-11, inclusive, starting at 2015.  X
+TODO: hour/minute/second/ms/us instead of just dates in a sequence?
+TODO: can do better than strptime, gnulib has a timespec struct that comes with useful functions
+timspec_add, timespec_sub, this is also what parse_datetime wants to put its results into.
+or maybe should use tai64 to represent the date...
 */
 
 #ifdef HAVE_CONFIG_H
@@ -231,7 +220,7 @@ int main(int argc, char **argv) {
     }
 
     if(xstrtol(argv[optind+1], NULL, 10, &offset, "") != LONGINT_OK) {
-    /* not a valid integer, check for valid date */
+      /* not a valid integer, check for valid date */
       end = strptime(argv[optind+1], format_str, &end_tm);
       if(end == NULL || *end != '\0') {
         error(0, 0, "bad end date format: %s\n", argv[optind]);
