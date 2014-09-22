@@ -213,19 +213,11 @@ int main(int argc, char **argv) {
    * int print that many days from the start date (forward or backward). 
    */
   if(n_args == 2) {
-    char *end = strptime(argv[optind], format_str, &start_tm);
-    if(end == NULL || *end != '\0') {
-      error(0, 0, "bad start date format: %s\n", argv[optind]);
-      usage(EXIT_FAILURE);
-    }
+    xstrptime(argv[optind], format_str, &start_tm);
 
     if(xstrtol(argv[optind+1], NULL, 10, &offset, "") != LONGINT_OK) {
-      /* not a valid integer, check for valid date */
-      end = strptime(argv[optind+1], format_str, &end_tm);
-      if(end == NULL || *end != '\0') {
-        error(0, 0, "bad end date format: %s\n", argv[optind]);
-        usage(EXIT_FAILURE);
-      }
+      /* not a valid integer, check for valid date */      
+      xstrptime(argv[optind+1], format_str, &end_tm);
     /* second arg is an offset */
     } else {
       end_tm = start_tm;
@@ -244,7 +236,6 @@ int main(int argc, char **argv) {
 
   /* if there are three args then it's start_date interval end_date */
   if(n_args == 3) {
-
     xstrptime(argv[optind], format_str, &start_tm); 
     xstrptime(argv[optind+2], format_str, &end_tm);
     if(xstrtol(argv[optind+1], NULL, 10, &step, "") != LONGINT_OK) {
