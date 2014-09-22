@@ -35,6 +35,7 @@
 
 #include "xstrtol.h"  /* xstrtol */
 #include "progname.h" /* set_program_name */
+#include "quote.h"    /* quote */
 
 #define PROGRAM_NAME "dseq"
 #define AUTHORS proper_name ("Dallas Lynn")
@@ -85,7 +86,7 @@ char *
 xstrptime(const char *s, const char *format, struct tm *tm) {
   char *end = strptime(s, format, tm);
   if(end == NULL || *end != '\0') {
-    error(0, 0, "bad date format: %s\n", s);
+    error(0, 0, "bad date format: %s\n", quote(s));
     usage(EXIT_FAILURE);
   }
 
@@ -196,15 +197,14 @@ int main(int argc, char **argv) {
   }
 
   if(n_args > 3) {
-    // TODO: should quote the argv part?
-    error(0, 0, "extra operand %s", argv[optind + 3]);
+    error(0, 0, "extra operand %s", quote(argv[optind + 3]));
     usage(EXIT_FAILURE);
   }
 
   /* if there is one arg it must be an integer and the implicit start is today */
   if(n_args == 1) {
     if(xstrtol(argv[optind], NULL, 10, &offset, "") != LONGINT_OK) {
-      error(0, 0, "invalid integer argument: %s\n", argv[optind]);
+      error(0, 0, "invalid integer argument: %s\n", quote(argv[optind]));
       usage(EXIT_FAILURE);
     }
 
@@ -248,7 +248,7 @@ int main(int argc, char **argv) {
     xstrptime(argv[optind], format_str, &start_tm); 
     xstrptime(argv[optind+2], format_str, &end_tm);
     if(xstrtol(argv[optind+1], NULL, 10, &step, "") != LONGINT_OK) {
-      error(0, 0, "invalid integer argument: %s\n", argv[optind+1]);
+      error(0, 0, "invalid integer argument: %s\n", quote(argv[optind+1]));
       usage(EXIT_FAILURE);
     }
   }
