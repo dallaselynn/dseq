@@ -37,10 +37,14 @@
 #include "progname.h" /* set_program_name */
 #include "quote.h"    /* quote */
 #include "closeout.h" /* close_stdout */
+#include "gettext.h"
 
 #define PROGRAM_NAME "dseq"
 #define AUTHORS proper_name ("Dallas Lynn")
 #define ONE_DAY 24 * 60 * 60
+
+#define _(msgid) gettext(msgid)
+#define N_(msgid) msgid
 
 static char const *separator;
 static long step;
@@ -60,8 +64,7 @@ static struct option const long_options[] =
 void
 usage(int status) { 
   if (status != EXIT_SUCCESS) {
-    //  TODO: gettext that and all dat text shit
-    fprintf(stderr, "Try '%s --help' for more information.\n", PROGRAM_NAME);
+    fprintf(stderr, _("Try '%s --help' for more information.\n"), PROGRAM_NAME);
   } else {
     // TODO: write the actual usage
     printf("Use me like so motherfucker\n");    
@@ -155,6 +158,8 @@ int main(int argc, char **argv) {
 
   set_program_name(argv[0]);
   setlocale(LC_ALL, "");
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
   atexit(close_stdout);
 
   while(optind < argc) {
@@ -189,19 +194,19 @@ int main(int argc, char **argv) {
   unsigned int n_args = argc - optind;
   
   if(n_args < 1) {
-    error(0, 0, "missing operand");
+    error(0, 0, _("missing operand"));
     usage(EXIT_FAILURE);
   }
 
   if(n_args > 3) {
-    error(0, 0, "extra operand %s", quote(argv[optind + 3]));
+    error(0, 0, _("extra operand %s"), quote(argv[optind + 3]));
     usage(EXIT_FAILURE);
   }
 
   /* if there is one arg it must be an integer and the implicit start is today */
   if(n_args == 1) {
     if(xstrtol(argv[optind], NULL, 10, &offset, "") != LONGINT_OK) {
-      error(0, 0, "invalid integer argument: %s\n", quote(argv[optind]));
+      error(0, 0, _("invalid integer argument: %s\n"), quote(argv[optind]));
       usage(EXIT_FAILURE);
     }
 
@@ -245,7 +250,7 @@ int main(int argc, char **argv) {
     xstrptime(argv[optind], format_str, &start_tm); 
     xstrptime(argv[optind+2], format_str, &end_tm);
     if(xstrtol(argv[optind+1], NULL, 10, &step, "") != LONGINT_OK) {
-      error(0, 0, "invalid integer argument: %s\n", quote(argv[optind+1]));
+      error(0, 0, _("invalid integer argument: %s\n"), quote(argv[optind+1]));
       usage(EXIT_FAILURE);
     }
   }

@@ -10,6 +10,7 @@ AC_CONFIG_HEADERS([config.h])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CC_STDC
+
 gl_EARLY
 gl_INIT
 AC_PROG_INSTALL
@@ -28,7 +29,10 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MKTIME
 AC_CHECK_FUNCS([localtime_r memset strtol])
 
-AC_CONFIG_FILES([Makefile
+AM_GNU_GETTEXT_VERSION([0.18.3])
+AM_GNU_GETTEXT([external])
+
+AC_CONFIG_FILES([Makefile po/Makefile.in
                  src/Makefile
                  lib/Makefile])
 AC_OUTPUT
