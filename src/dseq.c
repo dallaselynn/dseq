@@ -66,9 +66,28 @@ usage(int status) {
   if (status != EXIT_SUCCESS) {
     fprintf(stderr, _("Try '%s --help' for more information.\n"), PROGRAM_NAME);
   } else {
-    // TODO: write the actual usage
-    printf("Use me like so motherfucker\n");    
-  }
+    printf(_("\
+Usage: %s [OPTION]... LAST\n\
+  or:  %s [OPTION]... FIRST LAST\n\
+  or:  %s [OPTION]... FIRST INCREMENT LAST\n\
+"), program_name, program_name, program_name);
+    fputs(_("\
+Print dates from first to last, in steps of INCREMENT.\n\n\
+Mandatory arguments to long options are mandatory for short options too.\n\
+  -i, --input=FORMAT       expect this strptime style format for FIRST and/or LAST\n\
+  -o, --output=FORMAT      print dates in this strptime format\n\
+  -s, --separator=STRING   use STRING to separate dates (default: \\n)\n\
+      --help               display this help and exit\n\
+      --version            output version information and exit\n\
+\n\
+If only LAST is given, first defaults to today.  If INCREMENT is omitted, it\n\
+defaults to 1. If FIRST is later than LAST, the sequence will be printed\n\
+backward.  This is different than the seq command.  INCREMENT can not be zero,\n\
+that makes no sense.\n\n\
+FORMAT arguments to input and output must be suitable for strftime and strptime.\n\
+The default format for both input and output is YYYY-MM-DD.\n\
+"), stdout);
+  } 
 
   exit(status);
 }
