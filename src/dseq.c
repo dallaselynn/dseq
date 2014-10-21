@@ -40,7 +40,8 @@
 #include "gettext.h"
 
 #define PROGRAM_NAME "dseq"
-#define AUTHORS proper_name ("Dallas Lynn")
+// proper_name is used by GNU libs but my name is ascii
+#define AUTHORS "Dallas Lynn"
 #define ONE_DAY 24 * 60 * 60
 
 #define _(msgid) gettext(msgid)
@@ -87,9 +88,40 @@ that makes no sense.\n\n\
 FORMAT arguments to input and output must be suitable for strftime and strptime.\n\
 The default format for both input and output is YYYY-MM-DD.\n\
 "), stdout);
+    fputs(_("\
+\n\
+Examples:\n\
+Print the next 10 days in YYYY-MM-DD format\n\
+  $ dseq 10\n\
+\n\
+Print the last 10 days starting today in MM/DD/YYYY format\n\
+  $ dseq -o %m/%d/%Y -10\n\
+Print the days in January, 2015\n\
+  $ dseq 2015-01-01 2015-01-31\n\
+Print every fifth day between January 7th 2015 and May 9th 2015\n\
+  $ dseq 2015-01-07 5 2015-05-09\n\
+Print the next 10 days in your locale's date format, comma separated\n\
+  $ dseq -o %x -s : 10\n\
+"), stdout);
   } 
 
   exit(status);
+}
+
+
+void
+version() {
+  printf(_("%s\n\
+Copyright (C) %d %s\n\
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
+This is free software: you are free to change and redistribute it.\n\
+There is NO WARRANTY, to the extent permitted by law.\n\
+\n\
+Written by %s\n\
+"), PACKAGE_STRING, COPYRIGHT_YEAR, AUTHORS, AUTHORS);
+
+
+  exit(EXIT_SUCCESS);
 }
 
 
@@ -203,7 +235,7 @@ int main(int argc, char **argv) {
       usage(EXIT_SUCCESS);
       break;
     case 'v':
-      usage(EXIT_SUCCESS);
+      version();
       break;
     default:
       usage(EXIT_FAILURE);
