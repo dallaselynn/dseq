@@ -34,6 +34,19 @@ AC_TYPE_SSIZE_T
 AC_STRUCT_TIMEZONE
 AC_CHECK_TYPES([ptrdiff_t])
 
+AC_DEFINE([COPYRIGHT_YEAR], [m4_esyscmd([date +%Y])], [year in copyright message])
+
+dnl GNU help2man creates man pages from --help output; in many cases, this
+dnl is sufficient, and obviates the need to maintain man pages separately.
+dnl However, this means invoking executables, which we generally cannot do
+dnl when cross-compiling, so we test to avoid that (the variable
+dnl "cross_compiling" is set by AC_PROG_CC).
+AS_IF([test $cross_compiling = no], [
+  AM_MISSING_PROG([HELP2MAN], [help2man])
+], [
+  HELP2MAN=:
+])
+
 # Checks for library functions.
 AM_GNU_GETTEXT_VERSION([0.18.3])
 AM_GNU_GETTEXT([external])
@@ -47,5 +60,6 @@ AC_CHECK_FUNCS([__fpending atexit clock_gettime getpagesize gettimeofday iswprin
 
 AC_CONFIG_FILES([Makefile po/Makefile.in
                  lib/Makefile
-                 src/Makefile])
+                 src/Makefile
+                 man/Makefile])
 AC_OUTPUT
