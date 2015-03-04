@@ -6,6 +6,7 @@ AC_INIT([dseq], [0.5], [dallas@dallaslynn.com])
 AM_INIT_AUTOMAKE([dist-bzip2 -Wall parallel-tests color-tests])
 AC_CONFIG_SRCDIR([src/dseq.c])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CC
@@ -13,7 +14,10 @@ AC_PROG_CC_STDC
 
 gl_EARLY
 gl_INIT
+
+AC_PROG_YACC
 AC_PROG_INSTALL
+LT_INIT
 
 # Checks for libraries.
 

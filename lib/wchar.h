@@ -526,7 +526,7 @@ _GL_WARN_ON_USE (mbsinit, "mbsinit is unportable - "
 
 /* Convert a multibyte character to a wide character.  */
 #if 1
-# if 1
+# if 0
 #  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
 #   undef mbrtowc
 #   define mbrtowc rpl_mbrtowc

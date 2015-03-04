@@ -22,23 +22,9 @@
 #endif
 
 
-#ifdef _GL_INCLUDING_UNISTD_H
-/* Special invocation convention:
-   - On Mac OS X 10.3.9 we have a sequence of nested includes
-     <unistd.h> -> <signal.h> -> <pthread.h> -> <unistd.h>
-     In this situation, the functions are not yet declared, therefore we cannot
-     provide the C++ aliases.  */
-
-#include_next <unistd.h>
-
-#else
-/* Normal invocation convention.  */
-
 /* The include_next requires a split double-inclusion guard.  */
 #if 1
-# define _GL_INCLUDING_UNISTD_H
 # include_next <unistd.h>
-# undef _GL_INCLUDING_UNISTD_H
 #endif
 
 /* Get all possible declarations of gethostname().  */
@@ -708,7 +694,7 @@ _GL_WARN_ON_USE (dup3, "dup3 is unportable - "
 #endif
 
 
-#if 1
+#if 0
 # if !1
 /* Set of environment variables and values.  An array of strings of the form
    "VARIABLE=VALUE", terminated with a NULL.  */
@@ -1865,5 +1851,4 @@ _GL_CXXALIASWARN (write);
 _GL_INLINE_HEADER_END
 
 #endif /* _GL_UNISTD_H */
-#endif /* _GL_INCLUDING_UNISTD_H */
 #endif /* _GL_UNISTD_H */

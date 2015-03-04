@@ -842,29 +842,6 @@ _GL_CXXALIAS_SYS (putenv, int, (char *string));
 _GL_CXXALIASWARN (putenv);
 #endif
 
-#if 0
-# if 0
-#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
-#   undef qsort_r
-#   define qsort_r rpl_qsort_r
-#  endif
-_GL_FUNCDECL_RPL (qsort_r, void, (void *base, size_t nmemb, size_t size,
-                                  int (*compare) (void const *, void const *,
-                                                  void *),
-                                  void *arg) _GL_ARG_NONNULL ((1, 4)));
-_GL_CXXALIAS_RPL (qsort_r, void, (void *base, size_t nmemb, size_t size,
-                                  int (*compare) (void const *, void const *,
-                                                  void *),
-                                  void *arg));
-# else
-_GL_CXXALIAS_SYS (qsort_r, void, (void *base, size_t nmemb, size_t size,
-                                  int (*compare) (void const *, void const *,
-                                                  void *),
-                                  void *arg));
-# endif
-_GL_CXXALIASWARN (qsort_r);
-#endif
-
 
 #if 0
 # if !1
@@ -1128,7 +1105,7 @@ _GL_WARN_ON_USE (secure_getenv, "secure_getenv is unportable - "
 # endif
 #endif
 
-#if 1
+#if 0
 /* Set NAME to VALUE in the environment.
    If REPLACE is nonzero, overwrite an existing value.  */
 # if 0
@@ -1252,7 +1229,7 @@ _GL_WARN_ON_USE (unlockpt, "unlockpt is not portable - "
 # endif
 #endif
 
-#if 1
+#if 0
 /* Remove the variable NAME from the environment.  */
 # if 0
 #  if !(defined __cplusplus && defined GNULIB_NAMESPACE)

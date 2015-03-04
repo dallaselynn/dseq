@@ -24,9 +24,7 @@
 #ifndef _GL_SYS_TYPES_H
 
 /* The include_next requires a split double-inclusion guard.  */
-# define _GL_INCLUDING_SYS_TYPES_H
 #include_next <sys/types.h>
-# undef _GL_INCLUDING_SYS_TYPES_H
 
 #ifndef _GL_SYS_TYPES_H
 #define _GL_SYS_TYPES_H
