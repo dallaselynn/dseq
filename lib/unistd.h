@@ -694,7 +694,7 @@ _GL_WARN_ON_USE (dup3, "dup3 is unportable - "
 #endif
 
 
-#if 0
+#if 1
 # if !1
 /* Set of environment variables and values.  An array of strings of the form
    "VARIABLE=VALUE", terminated with a NULL.  */

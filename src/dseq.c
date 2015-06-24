@@ -2,7 +2,7 @@
 
 /* dseq -- print a sequence of dates to standard out.  Like seq, but for dates.
 
-   Copyright 2014 Dallas Lynn
+   Copyright 2014-15 Dallas Lynn
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <stdbool.h>  /* bool */
 #include <stdlib.h>   /* exit */
 #include <error.h>    /* error */
-#include <time.h>
 #include <string.h>
 #include <stdint.h>   /* SIZE_MAX */
 #include <errno.h>    /* errno */
@@ -33,11 +32,13 @@
 #include <unistd.h>   /* stdout */
 #include <locale.h>   /* setlocale */
 
+#include "time.h"
 #include "xstrtol.h"  /* xstrtol */
 #include "progname.h" /* set_program_name */
 #include "quote.h"    /* quote */
 #include "closeout.h" /* close_stdout */
 #include "gettext.h"
+#include "parse-datetime.h" /* parse_datetime */
 
 #define PROGRAM_NAME "dseq"
 // proper_name is used by GNU libs but my name is ascii
@@ -75,7 +76,6 @@ Usage: %s [OPTION]... LAST\n\
     fputs(_("\
 Print dates from first to last, in steps of INCREMENT.\n\n\
 Mandatory arguments to long options are mandatory for short options too.\n\
-  -i, --input=FORMAT       expect this strptime style format for FIRST and/or LAST\n\
   -o, --output=FORMAT      print dates in this strptime format\n\
   -s, --separator=STRING   use STRING to separate dates (default: \\n)\n\
       --help               display this help and exit\n\
@@ -131,21 +131,16 @@ format_size (char const *fmt, struct tm *t) {
 }
 
 
-static char const * _GL_ATTRIBUTE_CONST
-get_default_format(void) {
-  return "%Y-%m-%d";
-}
-
-
-static char *
-xstrptime(const char *s, const char *format, struct tm *tm) {
-  char *end = strptime(s, format, tm);
-  if(end == NULL || *end != '\0') {
+static void
+xstrptime(const char *s, struct tm *tm) {
+  struct timespec result;
+  
+  if(!parse_datetime(&result, s, 0)) {
     error(0, 0, "bad date format: %s\n", quote(s));
     usage(EXIT_FAILURE);
   }
 
-  return end;
+  localtime_r(&result.tv_sec, tm);
 }
 
 
@@ -202,8 +197,7 @@ int main(int argc, char **argv) {
   memset(&start_tm, 0, sizeof(struct tm));
   memset(&end_tm, 0, sizeof(struct tm));
 
-  char const *format_str = get_default_format();
-  char const *output_format = get_default_format();
+  char const *output_format = "%Y-%m-%d";
   separator = "\n";
   step = 1;
 
@@ -222,9 +216,6 @@ int main(int argc, char **argv) {
       break;
     
     switch(optc) {
-    case 'i':
-      format_str = optarg;
-      break;
     case 'o':
       output_format = optarg;
       break;
@@ -275,11 +266,11 @@ int main(int argc, char **argv) {
    * int print that many days from the start date (forward or backward). 
    */
   if(n_args == 2) {
-    xstrptime(argv[optind], format_str, &start_tm);
+    xstrptime(argv[optind], &start_tm);
 
     if(xstrtol(argv[optind+1], NULL, 10, &offset, "") != LONGINT_OK) {
       /* not a valid integer, check for valid date */      
-      xstrptime(argv[optind+1], format_str, &end_tm);
+      xstrptime(argv[optind+1], &end_tm);
     /* second arg is an offset */
     } else {
       end_tm = start_tm;
@@ -298,8 +289,8 @@ int main(int argc, char **argv) {
 
   /* if there are three args then it's start_date interval end_date */
   if(n_args == 3) {
-    xstrptime(argv[optind], format_str, &start_tm); 
-    xstrptime(argv[optind+2], format_str, &end_tm);
+    xstrptime(argv[optind], &start_tm); 
+    xstrptime(argv[optind+2], &end_tm);
     if(xstrtol(argv[optind+1], NULL, 10, &step, "") != LONGINT_OK) {
       error(0, 0, _("invalid integer argument: %s\n"), quote(argv[optind+1]));
       usage(EXIT_FAILURE);

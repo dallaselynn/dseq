@@ -1105,7 +1105,7 @@ _GL_WARN_ON_USE (secure_getenv, "secure_getenv is unportable - "
 # endif
 #endif
 
-#if 0
+#if 1
 /* Set NAME to VALUE in the environment.
    If REPLACE is nonzero, overwrite an existing value.  */
 # if 0
@@ -1229,7 +1229,7 @@ _GL_WARN_ON_USE (unlockpt, "unlockpt is not portable - "
 # endif
 #endif
 
-#if 0
+#if 1
 /* Remove the variable NAME from the environment.  */
 # if 0
 #  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
