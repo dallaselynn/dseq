@@ -1,1 +1,5 @@
 This is dseq, which is like seq, but for dates.
+
+Compile with the usual salute: ./configure && make 
+
+Make check to run the tests

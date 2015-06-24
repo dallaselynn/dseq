@@ -62,7 +62,7 @@ static struct option const long_options[] =
 };
 
 
-void
+static void
 usage(int status) { 
   if (status != EXIT_SUCCESS) {
     fprintf(stderr, _("Try '%s --help' for more information.\n"), PROGRAM_NAME);
@@ -109,8 +109,8 @@ Print the next 10 days in your locale's date format, comma separated\n\
 }
 
 
-void
-version() {
+static void
+version(void) {
   printf(_("%s\n\
 Copyright (C) %d %s\n\
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
@@ -132,12 +132,12 @@ format_size (char const *fmt, struct tm *t) {
 
 
 static char const * _GL_ATTRIBUTE_CONST
-get_default_format() {
+get_default_format(void) {
   return "%Y-%m-%d";
 }
 
 
-char *
+static char *
 xstrptime(const char *s, const char *format, struct tm *tm) {
   char *end = strptime(s, format, tm);
   if(end == NULL || *end != '\0') {
